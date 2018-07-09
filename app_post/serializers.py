@@ -2,6 +2,11 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from app_post.models import Post, Category
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
 class CategorySerializer(serializers.Serializer):
     name = serializers.CharField(max_length=20)
     description = serializers.CharField(max_length=200)
