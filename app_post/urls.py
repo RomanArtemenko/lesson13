@@ -18,7 +18,12 @@ from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import UserDetailView, UserListView, CategoryDetailView, CategoryListView, PostDetailView, PostListView 
+from .views import UserDetailView, UserListView, \
+    CategoryDetailView, CategoryListView, CategoryDetailViewSet,\
+    PostDetailView, PostListView, PostDetailViewV2
+
+router = DefaultRouter()
+router.register(r'categories', views.CategoryDetailViewSet)
 
 urlpatterns = [
     path('', views.index , name='index'),
@@ -28,4 +33,6 @@ urlpatterns = [
     url(r'api/v1.0/categories/(?P<pk>[0-9]+)/$', CategoryDetailView.as_view()),
     url(r'api/v1.0/posts/$', PostListView.as_view()),
     url(r'api/v1.0/posts/(?P<pk>[0-9]+)/$', PostDetailView.as_view()),
+    url(r'api/v2.0/', include(router.urls)),
+    url(r'api/v2.0/posts/(?P<pk>[0-9]+)/$', PostDetailViewV2.as_view()),
 ]
