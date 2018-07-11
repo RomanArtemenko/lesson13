@@ -18,18 +18,14 @@ from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import UserView, CategoryView, PostView
-
-# router = DefaultRouter()
-
-# router.register(r'users', UserView, 'Users')
-# router.register(r'categories', CategoryView, 'Categories')
-# router.register(r'posts', PostView, 'Posts')
+from .views import UserDetailView, UserListView, CategoryDetailView, CategoryListView, PostDetailView, PostListView 
 
 urlpatterns = [
     path('', views.index , name='index'),
-    # url(r'api/v1.0/', sinclude(router.urls)),
-    url(r'api/v1.0/users', UserView.as_view()),
-    url(r'api/v1.0/categories', CategoryView.as_view()),
-    url(r'api/v1.0/posts', PostView.as_view()),
+    url(r'api/v1.0/users/$', UserListView.as_view()),
+    url(r'api/v1.0/users/(?P<pk>[0-9]+)/$', UserDetailView.as_view()),
+    url(r'api/v1.0/categories/$', CategoryListView.as_view()),
+    url(r'api/v1.0/categories/(?P<pk>[0-9]+)/$', CategoryDetailView.as_view()),
+    url(r'api/v1.0/posts/$', PostListView.as_view()),
+    url(r'api/v1.0/posts/(?P<pk>[0-9]+)/$', PostDetailView.as_view()),
 ]
