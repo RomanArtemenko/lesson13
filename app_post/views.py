@@ -8,7 +8,10 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
+from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
+from app_post.permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
 
 # Create your views here.
 def index(request):
@@ -21,7 +24,9 @@ class UserViewSet(ReadOnlyModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrReadOnly)
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)

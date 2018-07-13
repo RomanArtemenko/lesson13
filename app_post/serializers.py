@@ -10,10 +10,10 @@ class UserSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('id', 'name', 'description', 'is_active', 'user')
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ('id', 'status', 'category', 'user', 'title', 'text', 'create', 'update')
         read_only_fields = ('create', 'update')
