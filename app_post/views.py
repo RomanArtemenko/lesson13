@@ -14,6 +14,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from app_post.permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
 
 # Create your views here.
+
 def index(request):
     return render(request, 'app_post/index.html')
 
