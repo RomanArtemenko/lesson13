@@ -39,13 +39,16 @@
         'ws://' + window.location.host + '/ws/blog/');
 
       blogSocket.onmessage = function(e) {
+        console.log('XXX_on_message');
         var data = JSON.parse(e.data);
+        console.log(data);
         var newPostId = data['id'];
         alert(newPostId); //for testing
       };
 
       blogSocket.onclose =function(e) {
         console.error('Blog socket closed unexpectedly');
+        console.log('XXX_on_closed');
       };
 
     </script>
