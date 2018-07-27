@@ -16,7 +16,9 @@ from app_post.permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
 # Create your views here.
 
 def index(request):
-    return render(request, 'app_post/index.html')
+    articles = Post.objects.all().order_by('-create')
+
+    return render(request, 'app_post/index.html', {'articles': articles})
 
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all()

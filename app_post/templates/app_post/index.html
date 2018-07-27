@@ -45,6 +45,19 @@
 {% endblock %}
 
 {% block main %}
+      {% if articles %}
+        {% for article in articles %}
+            <div class="blog-post">
+                <h2 class="blog-post-title">{{ article.title }}</h2> 
+                <p class="blog-post-meta">{{ article.create }} by <a href="#">{{ article.user }}</a></p>
+
+                <p>{{ article.text }}</p>
+            </div><!-- /.blog-post -->
+        {% endfor %}
+      {% else %}
+          Article no yet
+      {% endif %}
+
           <div class="blog-post">
             <h2 class="blog-post-title">Another blog post</h2>
             <p class="blog-post-meta">December 23, 2013 by <a href="#">Jacob</a></p>
