@@ -1,20 +1,26 @@
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
 
 class NewPostConsumer(WebsocketConsumer):
     def connect(self):
+        self.group_name = 'posts_main'
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+        
         self.accept()
-    
+       
     def disconect(self, close_code):
-        pass
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
     
-    def recive(self, text_data='None data. WTF'):
-        # text_data_json = json.loads(text_data)
-        self.send(text_data="Hello Roman (=")
-
-
-    def notify(self, msg):
+    def notify(self, data):
         self.send(text_data=json.dumps({
-            'newId': msg['newId']
+            'newId': data['id']
         }))
     

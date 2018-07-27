@@ -4,13 +4,15 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 # Create your models here.
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-
+      
 class Category(models.Model):
     name = models.CharField(unique=True, max_length=20)
     description = models.CharField(max_length=200)
@@ -45,3 +47,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+@receiver(post_save, sender=Post)
+def create_notify(sender, instance=None, created=False, **kwargs):
+    if created:
+        async_to_sync(get_channel_layer().group_send)(
+            'posts_main', {
+                'type': 'notify',
+                'id': instance.pk
+            }
+        )

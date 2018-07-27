@@ -1,4 +1,48 @@
 {% extends "app_post/base.html" %}
+  
+{% block extra_js %}
+     <script>
+        function addPost(post){
+            var divPost = '<div class="blog-post">'
+                    + '<h2 class="blog-post-title">'+ post.title +'</h2>'
+                    + '<p class="blog-post-meta">'+ post.create +' by<a href="#"> '+ post.user_repr.username +'</a></p>'
+
+                    + '<p>'+ post.text +'</p>'
+                    + '</div>'
+                    + '<!--/.blog-post--> ';
+
+            return divPost;
+        }
+
+        function loadPost(id) {
+            var url = "http://127.0.0.1:8000/blog/api/v1.0/posts/"+ id +"/";
+
+            var postData = $.getJSON(url)
+                .done(function(data) {
+                    $( ".blog-main" ).prepend(addPost(data));
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ', ' + error;
+                    console.log("Request Failed: " + err);
+                });
+        }
+
+        var blogSocket = new WebSocket(
+          'ws://' + window.location.host + '/ws/blog/');
+
+        blogSocket.onmessage = function(e) {
+          // console.log(e.data);
+          var data = JSON.parse(e.data);
+  
+          loadPost(data['newId']);
+        };
+
+        blogSocket.onclose =function(e) {
+          console.error('Blog socket closed unexpectedly');
+        };
+
+    </script>
+{% endblock %}
 
 {% block main %}
           <div class="blog-post">
